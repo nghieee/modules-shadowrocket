@@ -1,0 +1,49 @@
+#!name=Spotify Premium 🎵
+#!desc=Mở khoá Spotify Premium - Bỏ quảng cáo, nghe không giới hạn, skip thoải mái
+#!author=ng_hiee
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Spotify.png
+# ～ Tương thích: Shadowrocket / Surge / LanceX
+# ～ Cập nhật: 29/10/2024
+#
+# ⚠️  LƯU Ý: Module này chỉ dùng cho mục đích học tập & nghiên cứu.
+# ⚠️  Vui lòng hỗ trợ nhà phát triển nếu bạn thích ứng dụng.
+#
+# 📌 CÁCH DÙNG:
+#   1. Bật MITM cho các domain Spotify bên dưới
+#   2. Cài module này vào Shadowrocket
+#   3. Đăng xuất rồi đăng nhập lại Spotify
+#   4. Enjoy Premium! 🎶
+#
+# 📌 Tính năng:
+#   ✅ Bỏ quảng cáo audio
+#   ✅ Phát nhạc không giới hạn (không bị shuffle)
+#   ✅ Skip bài không giới hạn
+#   ✅ Chất lượng âm thanh Very High
+#   ⚠️  Tải nhạc offline: Không hỗ trợ (cần tài khoản thật)
+
+[General]
+# Bắt buộc dùng HTTP engine cho các domain Spotify
+force-http-engine-hosts = %APPEND% spclient.wg.spotify.com, api.spotify.com, apresolve.spotify.com
+
+[MITM]
+# MITM chỉ áp dụng cho các domain Spotify cần thiết
+hostname = %APPEND% spclient.wg.spotify.com, api.spotify.com
+
+[Script]
+# ~ By ng_hiee
+
+# Bước 1: Chỉnh sửa REQUEST headers (xóa cache)
+spotify-header = type=http-request, pattern=^https:\/\/(spclient\.wg\.spotify\.com|api\.spotify\.com)\/.*, script-path=https://raw.githubusercontent.com/nghieee/modules-shadowrocket/main/js/spotify/spotifyHeader.js, requires-body=false, timeout=10, tag=Spotify-Header
+
+# Bước 2: Inject Premium vào product-state response
+spotify-product = type=http-response, pattern=^https:\/\/spclient\.wg\.spotify\.com\/melody\/v1\/product_state, script-path=https://raw.githubusercontent.com/nghieee/modules-shadowrocket/main/js/spotify/spotify.js, requires-body=true, timeout=10, tag=Spotify-ProductState
+
+# Bước 3: Xử lý connect-state (trạng thái phát nhạc)
+spotify-connect = type=http-response, pattern=^https:\/\/spclient\.wg\.spotify\.com\/connect-state\/v1\/.*, script-path=https://raw.githubusercontent.com/nghieee/modules-shadowrocket/main/js/spotify/spotify.js, requires-body=true, timeout=10, tag=Spotify-ConnectState
+
+[URL Rewrite]
+# Chặn các request quảng cáo Spotify
+^https?:\/\/spclient\.wg\.spotify\.com\/ads\/.* _ reject
+^https?:\/\/audio-fa\.spotify\.com\/.*ads.* _ reject
+^https?:\/\/pubads\.g\.doubleclick\.net\/.* _ reject
+^https?:\/\/spclient\.wg\.spotify\.com\/ad-logic\/.* _ reject

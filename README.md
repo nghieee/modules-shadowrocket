@@ -13,6 +13,7 @@
 | 📜 Tên Module | 📝 Mô tả | Trạng thái |
 |---|---|---|
 | [locket.module](./locket.module) | Mở khoá Locket Gold 🏅 | ✅ Hoạt động |
+| [spotify.module](./spotify.module) | Mở khoá Spotify Premium 🎵 | ✅ Hoạt động |
 
 ---
 
@@ -23,7 +24,7 @@
 2. Chọn **Module** → nhấn dấu **+**
 3. Dán URL raw của module:
 ```
-https://raw.githubusercontent.com/dhungx/modules-shadowrocket/main/locket.module
+https://github.com/nghieee/modules-shadowrocket/blob/master/locket.module
 ```
 
 ### Bước 2: Bật MITM
